@@ -1,4 +1,4 @@
-# HTML5 with Phaser !
+# Solar Take Over
 
 I've built a small framework to help out with this using gulp.
 
