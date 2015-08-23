@@ -1,0 +1,52 @@
+body, html {
+	margin: 0px;
+	padding: 0px;
+	text-align: center;
+	background: #000;
+}
+#game_view {
+	position: absolute;
+	top:0;
+	left: 0;
+	width: 1366px;
+	cursor: url('../img/cursor.png'), auto;
+}
+#game_view * {
+	cursor: url('../img/cursor.png'), auto;
+}
+.state-ui {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	display:none;
+	pointer-events:none;
+	* {
+		pointer-events: auto;
+	}
+	&.active {
+		display: block;
+	}
+	&.show {
+		display: block;
+	}
+}
+
+// Animation Work
+.ani-text {
+	position: absolute;
+	z-index: 100;
+	font-size: 1.2em;
+	font-style: bold;
+}
+.fadeDown {
+	transform: translateY(50px);
+	opacity: 0;
+	transition: 1.75s;
+} 
+.fadeUp {
+	transform: translateY(-50px);
+	opacity: 0;
+	transition: 1.5s;
+} 

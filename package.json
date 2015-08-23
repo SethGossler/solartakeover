@@ -1,0 +1,27 @@
+{
+  "name": "solartakeover",
+  "description": "solar-it-grow-it",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "bower": "*",
+    "connect-livereload": "*",
+    "del": "*",
+    "express": "*",
+    "gulp": "~3.8.10",
+    "gulp-concat": "*",
+    "gulp-flatten": "*",
+    "gulp-if-else": "^1.0.3",
+    "gulp-inject": "*",
+    "gulp-jshint": "*",
+    "gulp-livereload": "*",
+    "gulp-notify": "^2.2.0",
+    "gulp-notify-growl": "^1.0.2",
+    "gulp-plumber": "^0.6.6",
+    "gulp-rename": "*",
+    "gulp-sass": "*",
+    "gulp-uglify": "*",
+    "gulp-util": "^3.0.3",
+    "tiny-lr": "*"
+  }
+}

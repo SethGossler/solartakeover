@@ -1,0 +1,56 @@
+/*
+* FIXME!
+* Colors -- this should be party of a _variables.scss
+*/
+
+$red: #A9071E;
+$redShade: $red - #333;
+$blue: #AAD1D8;
+$blueShade: $blue - #333;
+$green: #A0D36E;
+$greenShade: #42770D;
+$yellow: #FACB47;
+$white: #fff;
+$offWhite: #f1f1f1;
+$darkGray: #222;
+/* Font Families */
+* {
+	font-family: 'Open Sans', sans-serif;
+	color: $offWhite;
+
+}
+h1, h2, h3, h4, h5 {
+	font-family: 'Cinzel', serif;
+}
+
+/* Typo */
+h1 {
+	font-size: 36px;
+	color: $blue;
+	text-shadow: 1px 1px 2px $greenShade,
+				 0px 0px 10px $darkGray,;
+
+}
+h5 {
+	color: $blueShade;
+}
+
+label, h3 {
+	font-family: 'Cinzel', serif;
+	color: $blue;
+	text-shadow: 1px 1px 2px $greenShade,
+				 0px 0px 10px $darkGray,;
+}
+
+// Header types
+.t1 {
+	font-size: 1.25em;
+	margin: 0;
+}
+
+
+// Paragraph types
+.p2 {
+	font-size: 1em;
+	margin: 0.2em;
+}

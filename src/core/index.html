@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title> Solartake Over</title>
+        <script src="/assets/js/underscore/underscore.js"></script>
+        <script src="/assets/js/backbone/backbone.js"></script>
+        <script src="/assets/js/jquery/dist/jquery.js"></script>
+        <script src="/assets/js/phaser/build/phaser.min.js"></script>
+        <script src="/assets/js/planetBuilder.js"></script>
+        <script src="/assets/js/modules.js"></script>
+        <script src="/assets/js/main.js"></script>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,600|Cinzel:400,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="/assets/css/core.css"/>
+        <link rel="stylesheet" type="text/css" href="/assets/css/styles.css"/>
+    </head>
+    <body>
+        <script>
+          window.fbAsyncInit = function() {
+            FB.init({
+              appId      : '823650784364106',
+              xfbml      : true,
+              version    : 'v2.2'
+            });
+            // ADD ADDITIONAL FACEBOOK CODE HERE
+          };
+          (function(d, s, id){
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement(s); js.id = id;
+             js.src = "//connect.facebook.net/en_US/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+           }(document, 'script', 'facebook-jssdk'));
+        </script>
+        <div id="game_view">
+            <!-- inject:partials:html -->
+            <!-- endinject -->
+        </div>
+<!--         <div style="position: fixed; bottom:0; left: 0;"class="btn go-full-screen"> Go full Screen </div> -->
+    </body>
+</html>

@@ -1,0 +1,81 @@
+@import 'variables';
+@import 'mixins';
+
+.planet {
+	text-align: center;
+
+	.top {
+		position: absolute;
+		top: 20px;
+		left: 0;
+		width: 100%;
+		text-align: center;
+	}
+
+	.bottom {
+		position: absolute;
+		top: 768px - 180px;
+		left: 0px;
+		width: 100%;
+	}
+
+	.right {
+		position: absolute;
+		right: 300px;
+		top: 0;
+	}
+
+	.zoom-out {
+		position: absolute;
+		left: 20px;
+		top: 10px;
+		width: 3em;
+		height: 3em;
+		line-height: 3em;
+		border-radius: 3px;
+		background: rgba(50, 100, 200, 0.5);
+		color: $white;
+		transition: $transitionNormal;
+		&:hover {
+			background: rgba(50, 100, 200, 0.8);
+		}
+	}
+
+	.planet-name {
+		font-family: serif;
+		font-size: 3em;
+	}
+	.status {
+		font-size: 1em;
+	}
+
+	.resource-panel {
+		display: inline-block;
+		background: url("../img/planet-resource_panel.png");
+		width: 474px;
+		height: 140px;
+		opacity: 0.5;
+		transition: $transitionNormal;
+		&:hover {
+			opacity: 0.8;
+		}
+	}
+
+	.upgrade-panel {
+		position: relative;
+		top: 180px;
+
+		.upgrade {
+			width: 80px;
+			height: 80px;
+			border-radius: 999px;
+			background: rgba(50, 100, 200, 0.5);
+			margin-bottom: 10px;
+			transition: $transitionNormal;
+			&:hover {
+				background: rgba(50, 100, 200, 0.8);
+			}
+		}
+
+	}
+}

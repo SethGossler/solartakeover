@@ -1,0 +1,31 @@
+<script type="text/template" id="_teamRoster">
+  <div class="state-ui teamRoster show">
+    <div class="menu-bar"> 
+      <button class="btn close"></button> 
+    </div>
+    <div class="tabs">
+      <ul class="tab-menu">
+        <li class="p50 active" data-target="current-team">Team</li>
+        <li class="p50" data-target="roster">Free Agents</li>
+      </ul>
+      <ul data-id="current-team" class="tab-content show">
+        <% _.each(players, function(player) { %>
+          <li data-name="<%- player.name %>"> 
+            <span> <%- player.name %> </span>
+            <button class="btn cancel small"> fire </button> 
+          </li>
+        <% }); //endeach %>
+      </ul>
+      <ul data-id="roster" class="tab-content">
+        <% _.each(openAgents, function(player) { %>
+
+          <li data-name="<%- player.name %>"> 
+            <span> <%- player.name %> </span>
+            <button class="btn action small"> hirer </button> 
+          </li>
+
+        <% }); //endeach %>
+      <ul>
+    </div>
+  </div>
+</script>

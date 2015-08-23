@@ -1,0 +1,172 @@
+@import 'common';
+/*
+* Menu
+*/
+.rows {
+	* {
+		display: block;
+		margin: 0 auto;
+	}
+}
+.menu
+{
+	overflow:hidden;
+	position: relative;
+	display: none;
+	max-width: 80%;
+	margin: 0 auto;
+	border-radius: 10px;
+	z-index: 2;
+	&.show {
+		display: block;
+	}
+	&.absolute {
+		position: absolute;
+		z-index: 2;
+	}
+	.inner {
+		padding: 35px;
+		background: rgba(17, 17, 17, 0.9);
+		&.no-bar {
+			padding: 0px 35px 35px 35px;
+		}
+	}
+
+	ul {
+		padding:0; margin: 0;
+		list-style: none;
+		li {
+			padding:0; margin: 0;
+		}
+		button {
+			width: 100%;
+		}
+	}
+	input, select {
+		font-size: 24px;
+		padding:0.2em;
+		width: 300px;
+		margin-bottom: 0.5em;
+		color: $darkGray;
+		&.strip {
+			font-size: 1rem;
+			background: transparent;
+			-webkit-appearance: none;
+			border: none;
+			width: auto;
+			height: auto;
+			text-align: center;
+			color: $white;
+		}
+	}
+	textarea {
+
+		&.strip {
+			font-size: 1rem;
+			background: transparent;
+			-webkit-appearance: none;
+			border: none;
+			text-align: left;		
+		}
+	}
+	p {
+		margin: 0px;
+		padding: 35px;
+	}
+
+}
+.menu-bar {
+	position: relative;
+	height: 2em;
+	background: $lightGray;
+	box-shadow: 0px 2px 0px 0px ($lightGray - #222);
+}
+/*buttons*/
+button.btn, button.btn:focus {
+	outline: none;
+	border: none;
+}
+.btn {
+	@include buttonColor($blue);
+	display: inline-block;
+	width: 300px;
+	padding: 1em 0em;
+	color: $white;
+	text-transform: uppercase;
+	font-weight: 700;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+	&.continue {
+		@include buttonColor($blue);
+	}
+	&.cancel {
+		@include buttonColor($red);
+	}
+	&.action {
+		@include buttonColor($green);
+	}
+	&.small {
+		width: auto;
+		padding: 0.25 0.5em;
+		font-size: 0.75em;
+	}
+	&.close {
+		position: absolute;
+		right: 0.5em;
+		top: 0.25em;
+		height: 1.5em;
+		line-height: 1.5em;
+		width: 1.5em;
+		padding:0px;
+		background: $red;
+		box-shadow: 0px 0px 0px 2px $redShade;
+		&:before {
+			content:"X";
+			color: #fff;
+		}
+		&:hover {
+			background: $red - #111;
+		}
+		&:active {
+			background: $redShade;
+		}
+	}
+}
+
+/* Tabs */
+ul.tab-menu  {
+	@include clearfix();
+	li, li.active {
+		display: block;
+		float: left;	
+		width: 50%;
+		line-height: 32px;
+		background: $greenShade;
+		box-shadow: 0px 5px 0px 0px ($greenShade - #333);
+		&:hover {
+			background: ($greenShade - #111);
+		}
+		&:active {
+			background: ($greenShade - #333);
+		}
+	}
+	li.active {
+		background: ($green - #333);
+		&:hover {
+			background: ($green - #444);
+		}
+	}
+}
+
+.tab-content {
+	display: none; 
+	&.show {
+		display: block;
+	}
+}

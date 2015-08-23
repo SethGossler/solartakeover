@@ -1,0 +1,21 @@
+@import 'variables';
+@import 'mixins';
+
+.mainMenu {
+	display: none;
+	position: absolute;
+	top: 550px;
+	left: 0px;
+	padding: 0px;
+	width:100%;
+	text-align: center;
+	.start {
+		display: block;
+		margin: 0 auto;	
+	}
+	.fb-login {
+		margin-top: 1em;
+		@include buttonColor($fbBlue);
+	}
+
+}
