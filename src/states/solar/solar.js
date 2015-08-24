@@ -35,8 +35,9 @@ MOBA.solar.prototype = {
     var self = this;
 
     self.planets = [];
-    _.each(MOBA.planets, function(item){
+    _.each(MOBA.planets, function(item, index){
       var newPlanet = game.add.sprite( 0, 0, item.image);
+      newPlanet.index = index;
       newPlanet.radius = item.radius;
       newPlanet.period = item.period;
       newPlanet.startOffset = item.startOffset;
@@ -46,8 +47,8 @@ MOBA.solar.prototype = {
         newPlanet.tint = item.tint;
       }
       newPlanet.inputEnabled = true;
-      newPlanet.events.onInputDown.add(function(){
-        self.showPlanetDetail();
+      newPlanet.events.onInputDown.add(function(sprite){
+        self.showPlanetDetail(sprite);
       }, this);
       self.planets.push(newPlanet);
     });
@@ -55,6 +56,7 @@ MOBA.solar.prototype = {
   },
 
   showPlanetDetail: function(planetSprite) {
+    MOBA.currentPlanet = planetSprite.index;
     game.state.start('planet');
   },
 

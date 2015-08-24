@@ -29,7 +29,7 @@ MOBA.mainMenu.prototype = {
   bindings: function() {
     var self = this;
     self.$el.on('click', '.start.btn', function(){
-      self.state.start('planet');  
+      self.state.start('solar');  
     });
 
   },

@@ -11,8 +11,10 @@ MOBA.planet.prototype = {
   // Create the scene
   create: function() { 
     var self = this;
-    self._tpl = $("#planet_tpl");
-    self.$el = $(self._tpl.html());
+    self._tpl = $("#planet_tpl").html();
+    self._tpl = _.template(self._tpl);
+    console.log( MOBA.planets[MOBA.currentPlanet] );
+    self.$el = $(self._tpl( MOBA.planets[MOBA.currentPlanet] ));
     //setup world and camera
     // game.world.setBounds(0, 0, 2500, 2500);
     // game.camera.x = 1000;

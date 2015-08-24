@@ -5,25 +5,32 @@
 				- 
 			</div>
 			<div class="planet-name">
-				Midora
+				<%= name %>
 			</div>
 			<div class="status">
-				Tech Settlement
+				<% if( habitation == 1) { %>
+					Home World
+				<% } %>
+				<% if( habitation == 0) { %>
+					Uninhabited
+				<% } %>
 			</div>
 		</div>
 		<div class="right">
-			<div class="upgrade-panel">
-				<div class="upgrade one">
+			<% if(habitation > 0 ) { %>
+				<div class="upgrade-panel">
+					<div class="upgrade one">
+					</div>
+					<div class="upgrade two">
+					</div>
+					<div class="upgrade three">
+					</div>
+					<div class="upgrade four">
+					</div>
 				</div>
-				<div class="upgrade two">
-				</div>
-				<div class="upgrade three">
-				</div>
-				<div class="upgrade four">
-				</div>
-			</div>
+			<% } %>
 		</div>
-		<div class="bottom">
+		<div class="bottom <%= habitation == 0 ? 'colonize' : '' %>">
 			<div class="resource-panel">
 			</div>
 		</div>
