@@ -18,8 +18,16 @@ MOBA.solar.prototype = {
 
     //setup world and camera
     game.world.setBounds(0, 0, 2500, 2500);
-    game.camera.x = 1000;
-    game.camera.y = 1000;
+
+    if(false && MOBA.currentPlanet && MOBA.currentPlanet > 0 ) {
+      var prevPlanet = MOBA.planets[ MOBA.currentPlanet ];
+      game.camera.x = prevPlanet.x;
+      game.camera.y = prevPlanet.y;
+    } else {
+      game.camera.x = 600;
+      game.camera.y = 900;
+    }
+
     //add space background
     self.Space = game.add.sprite(0, 0, 'space_bg'); //2500x25000
     //add planets
@@ -41,12 +49,13 @@ MOBA.solar.prototype = {
       newPlanet.radius = item.radius;
       newPlanet.period = item.period;
       newPlanet.startOffset = item.startOffset;
-      newPlanet.scale.x = item.scale;
-      newPlanet.scale.y = item.scale;
+      newPlanet.scale.x = item.scale - 0.15;
+      newPlanet.scale.y = item.scale - 0.15;
       if( item.tint ) {
         newPlanet.tint = item.tint;
       }
       newPlanet.inputEnabled = true;
+      newPlanet.model = item;
       newPlanet.events.onInputDown.add(function(sprite){
         self.showPlanetDetail(sprite);
       }, this);
@@ -98,7 +107,9 @@ MOBA.solar.prototype = {
     _.each(self.planets, function(planetSprite){
       var relativeTimePeriod = ( game.time.now * (planetSprite.period * 0.0001) ) + ( planetSprite.startOffset * 3.14159265359 );
       planetSprite.x = game.world.centerX + Math.cos(relativeTimePeriod) * planetSprite.radius;
-      planetSprite.y = game.world.centerY + Math.sin(relativeTimePeriod) * planetSprite.radius;      
+      planetSprite.y = game.world.centerY + Math.sin(relativeTimePeriod) * planetSprite.radius;
+      planetSprite.model.x = planetSprite.x;
+      planetSprite.model.y = planetSprite.y;
     });
 
   },

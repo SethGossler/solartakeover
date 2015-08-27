@@ -13,16 +13,14 @@ MOBA.planet.prototype = {
     var self = this;
     self._tpl = $("#planet_tpl").html();
     self._tpl = _.template(self._tpl);
-    console.log( MOBA.planets[MOBA.currentPlanet] );
-    self.$el = $(self._tpl( MOBA.planets[MOBA.currentPlanet] ));
-    //setup world and camera
-    // game.world.setBounds(0, 0, 2500, 2500);
-    // game.camera.x = 1000;
-    // game.camera.y = 1000;
-    //add space background
+    var currentPlanet = MOBA.planets[MOBA.currentPlanet];
+    self.$el = $(self._tpl( currentPlanet ));
+
     self.Space = game.add.sprite(0, 0, 'space_bg'); //2500x25000
-    //add our planet
-    self.planet = game.add.sprite( (1366/2) - (608/2), 50, 'planet');
+    self.planet = game.add.sprite( (1366/2) - (608/2), 50, currentPlanet.image);
+    if( currentPlanet.tint ) {
+      self.planet.tint = currentPlanet.tint;
+    }
 
     self.bindings();
     self.renderLayout();

@@ -1,8 +1,8 @@
 var MOBA = MOBA || {};
 
-MOBA.stateName = function(){};
+MOBA.<%= answers.name %> = function(){};
 
-MOBA.stateName.prototype = {
+MOBA.<%= answers.name %>.prototype = {
   // preload any files you didn't preload in the preload state.
   preload: function() {
     var self = this;
@@ -11,7 +11,7 @@ MOBA.stateName.prototype = {
   // Create the scene
   create: function() { 
     var self = this;
-    self._tpl = ("#stateName_tpl");
+    self._tpl = ("#<%= answers.name %>_tpl");
     self.$el = $(self._tpl.html());
     self.bindings();
     self.renderLayout();
@@ -26,7 +26,7 @@ MOBA.stateName.prototype = {
   // Create and show your view
   renderLayout: function() {
     var self = this;
-    $("#moba").append(self.$el);
+    $("#game_view").append(self.$el);
     self.$el.show();
   },
 
