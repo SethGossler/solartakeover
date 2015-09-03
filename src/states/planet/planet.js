@@ -11,57 +11,60 @@ MOBA.planet.prototype = {
   // Create the scene
   create: function() { 
     var self = this;
-    self._tpl = $("#planet_tpl").html();
-    self._tpl = _.template(self._tpl);
-    var currentPlanet = MOBA.planets[MOBA.currentPlanet];
-    self.$el = $(self._tpl( currentPlanet ));
-
-    self.Space = game.add.sprite(0, 0, 'space_bg'); //2500x25000
-    self.planet = game.add.sprite( (1366/2) - (608/2), 50, currentPlanet.image);
-    if( currentPlanet.tint ) {
-      self.planet.tint = currentPlanet.tint;
-    }
-
-    self.bindings();
+    self.currentPlanet = MOBA.planets[MOBA.currentPlanet];
+    self.model = {
+      planet: self.currentPlanet,
+      setStatus: function(){ self.setStatus(this); },
+      zoomOut: function(){ self.zoomOut(); }
+    };
+    rivets.formatters.statustext = function(value) {
+      if( value == 0 ) {
+        return "Uninhabited";
+      }
+      if( value == 1 ) {
+        return "Homeworld";
+      }
+      if( value == 2 ) {
+        return "Settlement";
+      }
+      if( value == 3 ) {
+        return "Mining Corp";
+      }
+      if( value == 4 ) {
+        return "Farming Colony";
+      }
+    };
     self.renderLayout();
   },
 
-  // JQuery event bindings
-  bindings: function() {
+  setStatus: function(el) {
     var self = this;
-    self.$el.on("click", ".zoom-out", function(){  
-      game.state.start('solar');
-    });
+    var status = $(el).data("status");
+    self.currentPlanet.habitation = status;
+  },
+
+  zoomOut: function() {
+    game.state.start('solar');
   },
 
   // Create and show your view
   renderLayout: function() {
     var self = this;
+    self.$el = $($("#planet_tpl").html());
+    rivets.bind(self.$el, self.model);
     $("#game_view").append(self.$el);
+    self.Space = game.add.sprite(0, 0, 'space_bg'); //2500x25000
+    self.planet = game.add.sprite( (1366/2) - (608/2), 50, self.currentPlanet.image);
+    if( self.currentPlanet.tint ) {
+      self.planet.tint = self.currentPlanet.tint;
+    }
+    game.world.scale.set(1);
     self.$el.show();
   },
 
   // update tick / redraw
   update: function() {
     var self = this;
-    // on mouse move, move the camera
-    // var x = game.input.mousePointer.x;
-    // var y = game.input.mousePointer.y;
-    // if( x < 100 ) {
-    //   game.camera.x -= 4;
-    // }
-    // if( x > 1266 ) {
-    //   game.camera.x += 4;
-    // }
-    // if( y > 668 ) {
-    //   game.camera.y += 4;
-    // }
-    // if( y < 100 ) {
-    //   game.camera.y -= 4;
-    // }
-
-    // self.planet.x += 1;
-    // self.planet.y += 1;
   },
 
   shutdown: function() {

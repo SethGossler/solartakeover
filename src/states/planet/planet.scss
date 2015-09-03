@@ -14,12 +14,39 @@
 
 	.bottom {
 		position: absolute;
-		top: 768px - 180px;
+		top: 768 - 453px;
 		left: 0px;
 		width: 100%;
+		.resource-panel {
+			background: url("../img/planet-resource_panel-choice.png");
+		}
+		&.colonized {
+			top: 768px - 180px;
+			.resource-panel {
+				background: url("../img/planet-resource_panel.png");
+			}
+		}
+
+
 	}
-	.colonize.bottom {
-		top: 768 - 453px;
+
+
+
+	// The 3 Choices for colonization
+	.colonize-options {
+		@include clearfix();
+		.colonize {
+			float: left;
+			position: relative;
+			top: 25px;
+			width: 27%;
+			margin: 0px 3%;
+			color: #2B78D1;
+			transition: 0.25s;
+			&:hover {
+				color: #fff;
+			}
+		}
 	}
 
 	.right {
@@ -30,11 +57,10 @@
 
 	.zoom-out {
 		position: absolute;
-		left: 20px;
-		top: 10px;
-		width: 3em;
-		height: 3em;
-		line-height: 3em;
+		left: 50px;
+		top: 20px;
+		padding: 1em;
+		line-height: 1em;
 		border-radius: 3px;
 		background: rgba(50, 100, 200, 0.5);
 		color: $white;
@@ -53,6 +79,7 @@
 	}
 
 	.resource-panel {
+		position: relative;
 		display: inline-block;
 		background: url("../img/planet-resource_panel.png");
 		width: 474px;
@@ -62,6 +89,7 @@
 		&:hover {
 			opacity: 0.8;
 		}
+
 	}
 
 	.upgrade-panel {

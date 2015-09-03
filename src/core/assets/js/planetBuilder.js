@@ -45,7 +45,7 @@ var planetBuilder = function(){
 		"Storia"
 	];
 
-	this.maxRadiusDist = 1000; //more ore less, the # of pixels from the sun.
+	this.maxRadiusDist = 1200; //more ore less, the # of pixels from the sun.
 	this.avgRadiusDist = 700; // Where the "big" planets should live.
 };
 
@@ -92,12 +92,15 @@ planetBuilder.prototype = {
 	generateScale: function(planet) {
 		var value = planet.radius;
 		var scale = this.deviation( value, this.avgRadiusDist);
-		scale = scale - 0.3; // makes them all smaller (A scale of "1" is too big.)
+		scale = scale - 0.6; // makes them all smaller (A scale of "1" is too big.)
+		if( scale <= 0.22 ) {
+			return 0.22;
+		}
 		return Math.abs(scale);
 	},
 
 	generateRadius: function() {
-		var radius = _.random(150, this.maxRadiusDist);
+		var radius = _.random(250, this.maxRadiusDist);
 		return radius;
 	},
 

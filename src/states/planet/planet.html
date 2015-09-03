@@ -1,24 +1,19 @@
 <script type="template" id="planet_tpl">
 	<div class="state-ui planet">
 		<div class="top">
-			<div class="zoom-out">
-				- 
+			<div class="zoom-out" rv-on-click="zoomOut">
+				Back To Solar View
 			</div>
 			<div class="planet-name">
-				<%= name %>
+				{ planet.name }
 			</div>
 			<div class="status">
-				<% if( habitation == 1) { %>
-					Home World
-				<% } %>
-				<% if( habitation == 0) { %>
-					Uninhabited
-				<% } %>
+				{ planet.habitation | statustext }
 			</div>
 		</div>
 		<div class="right">
-			<% if(habitation > 0 ) { %>
-				<div class="upgrade-panel">
+
+				<div rv-if="planet.habitation" class="upgrade-panel">
 					<div class="upgrade one">
 					</div>
 					<div class="upgrade two">
@@ -28,10 +23,30 @@
 					<div class="upgrade four">
 					</div>
 				</div>
-			<% } %>
+
 		</div>
-		<div class="bottom <%= habitation == 0 ? 'colonize' : '' %>">
+		<div rv-class-colonized=planet.habitation class="bottom">
 			<div class="resource-panel">
+
+					<div rv-hide="planet.habitation" class="colonize-options">
+						<div class="colonize settlement" rv-on-click="setStatus" data-status="2">
+							Establish Settlement
+						</div>
+						<div class="colonize mining" rv-on-click="setStatus" data-status="3">
+							Establish Mining Corp
+						</div>
+						<div class="colonize farming" rv-on-click="setStatus" data-status="4">
+							Establish Farming Colony
+						</div>
+					</div>
+
+
+					<div rv-show="planet.habitation" class="planet-stats">
+						<div>
+							Planet Stats 
+						</div>
+					</div>
+
 			</div>
 		</div>
 	</div>

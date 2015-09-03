@@ -12,7 +12,7 @@ MOBA.boot.prototype = {
   create: function() { 
     var self = this;
     //loading screen will have a black background
-    self.game.stage.backgroundColor = '#777';  
+    self.game.stage.backgroundColor = '#000';  
     self.state.start('Preload');  
 
     var myPlanetBuilder = new planetBuilder();
