@@ -34,8 +34,8 @@ MOBA.mainMenu.prototype = {
 
   },
 
-  // update tick / redraw
-  update: function() {
+  // render tick / redraw
+  render: function() {
     var self = this;
   },
 

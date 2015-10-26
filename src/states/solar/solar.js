@@ -98,8 +98,12 @@ MOBA.solar.prototype = {
     self.$el.show();
   },
 
-  // update tick / redraw
   update: function() {
+    
+  },
+
+  // render tick / redraw
+  render: function() {
     var self = this;
     //on mouse move, move the camera
     var x = game.input.mousePointer.x;

@@ -15,7 +15,8 @@ MOBA.planet.prototype = {
     self.model = {
       planet: self.currentPlanet,
       setStatus: function(){ self.setStatus(this); },
-      zoomOut: function(){ self.zoomOut(); }
+      zoomOut: function(){ self.zoomOut(); },
+      upgrade: function(){ var num = $(this).attr('data-upgrade-num'); self.upgradePlanet( num ); }
     };
     rivets.formatters.statustext = function(value) {
       if( value == 0 ) {
@@ -35,6 +36,11 @@ MOBA.planet.prototype = {
       }
     };
     self.renderLayout();
+  },
+
+  upgradePlanet: function( upgradeNum ) {
+    var self = this;
+    self.currentPlanet.upgrades.unlockUpgrade( upgradeNum );
   },
 
   setStatus: function(el) {
@@ -62,8 +68,8 @@ MOBA.planet.prototype = {
     self.$el.show();
   },
 
-  // update tick / redraw
-  update: function() {
+  // render tick / redraw
+  render: function() {
     var self = this;
   },
 

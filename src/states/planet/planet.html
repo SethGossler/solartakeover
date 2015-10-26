@@ -14,13 +14,13 @@
 		<div class="right">
 
 				<div rv-if="planet.habitation" class="upgrade-panel">
-					<div class="upgrade one">
+					<div rv-on-click="upgrade" data-upgrade-num="1" class="upgrade one">
 					</div>
-					<div class="upgrade two">
+					<div rv-on-click="upgrade" data-upgrade-num="2" class="upgrade two">
 					</div>
-					<div class="upgrade three">
+					<div rv-on-click="upgrade" data-upgrade-num="3" class="upgrade three">
 					</div>
-					<div class="upgrade four">
+					<div rv-on-click="upgrade" data-upgrade-num="4" class="upgrade four">
 					</div>
 				</div>
 

@@ -1,26 +1,4 @@
 var planetBuilder = function(){
-	this.testPlanets = [
-		{
-			name: "Earth",
-			habitation: 1,
-			scale: 0.15,
-			image: "planet",
-			tint: 0xaaddee,
-			radius: 400,
-			period: 1,
-			startOffset: 0
-		},
-		{
-			name: "Nepture",
-			habitation: 0,
-			scale: 0.3,
-			image: "planet",
-			tint: 0xbbbbaa,
-			radius: 900,
-			period: 0.5,
-			startOffset: 1
-		}
-	];
 
 	this.planetNames = [
 		"Waswaetera",
@@ -59,8 +37,9 @@ planetBuilder.prototype = {
 		for( var i = 0; i < numberOfPlanets; i++ ) {
 			newPlanets.push( this.buildNewPlanet() );
 		}
+		// first Planet is the "homeworld"
 		newPlanets[0].habitation = 1;
-		console.log( newPlanets );
+
 		return newPlanets;
 	},
 
@@ -74,8 +53,37 @@ planetBuilder.prototype = {
 		newPlanet.startOffset = this.generateOffset();
 		newPlanet.period = this.generatePeriod(newPlanet);
 		newPlanet.habitation = 0;
+		newPlanet.upgrades = new this.UpgradeMechanism(newPlanet);
+		newPlanet.items = new this.ItemMechanism(newPlanet);
 		return newPlanet;
 	},
+
+
+	UpgradeMechanism: function( newPlanet ) {
+		var self = this;
+		self.unlockUpgrade = function( upgradeNum ) {
+			console.log( newPlanet.name );
+			console.log( upgradeNum );
+		};
+	},
+
+	ItemMechanism: function( newPlanet ) {
+		var self = this;
+		self.socialItems = [];
+		self.defenseItems = [];
+		self.productionItems = [];
+		self.addItem = function( item ) {
+			if( item.type == "social" ) {
+				self.socialItems.push( item );
+			} else if( item.type == "defense" ) {
+				self.defenseItems.push( item );
+			} else if( item.type == "production" ) {
+				self.productionItems.push( item );
+			}
+		};
+
+	},
+
 
 	generatePlanetName: function() {
 		return this.planetNames[ _.random(0, this.planetNames.length-1)];
