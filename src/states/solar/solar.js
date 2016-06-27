@@ -11,12 +11,21 @@ MOBA.solar.prototype = {
   // Create the scene
   create: function() { 
     var self = this;
+    self.model = {
+      techCredits: MOBA.PlayerEmpire.techCredits,
+      foodCredits: MOBA.PlayerEmpire.foodCredits
+    };
+    self.updaterInterval = setInterval(function(){
+      self.model.techCredits = MOBA.PlayerEmpire.techCredits;
+      self.model.foodCredits = MOBA.PlayerEmpire.foodCredits;
+    },500);
+
     self._tpl = $("#solar_tpl");
     self.$el = $(self._tpl.html());
     self.bindings();
     self.renderLayout();
     self.worldScale = 1;
-
+    MOBA.startGame();
     //setup world and camera
     game.world.setBounds(0, 0, 2500, 2500);
 
@@ -27,8 +36,8 @@ MOBA.solar.prototype = {
       var x = prevPlanet.x - 650;
       var y = prevPlanet.y - 380;
       
-      console.log( x );
-      console.log( y );
+      // console.log( x );
+      // console.log( y );
 
       game.camera.x = x;
       game.camera.y = y;
@@ -81,7 +90,7 @@ MOBA.solar.prototype = {
 
   showPlanetDetail: function(planetSprite) {
     MOBA.currentPlanet = planetSprite.index;
-    console.log( MOBA.currentPlanet );
+    MOBA.pauseGame();
     game.state.start('planet');
   },
 
@@ -94,6 +103,7 @@ MOBA.solar.prototype = {
   // Create and show your view
   renderLayout: function() {
     var self = this;
+    rivets.bind(self.$el, self.model);
     $("#game_view").append(self.$el);
     self.$el.show();
   },
@@ -167,6 +177,7 @@ MOBA.solar.prototype = {
   shutdown: function() {
     var self = this;
     self.$el.remove();
+    clearInterval( self.updaterInterval );
   }
 
 };

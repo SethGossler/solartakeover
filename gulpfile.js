@@ -118,6 +118,14 @@ gulp.task('core-sass', function() {
         .pipe(gulp.dest( 'build/assets/css/' ))
         .pipe(ifElse( !_building, liveReload ));
 });
+// compile our core js files
+gulp.task('core-js', function() {
+    return gulp.src( 'src/core/assets/js/*.js', {base:'./src/core/'} )
+        .pipe(plumber({errorHandler: plumberErrorHandler}))
+        .pipe(gulp.dest( 'build/assets/js/' ))
+        .pipe(ifElse( !_building, liveReload ));
+});
+
 // Watch Files For Changes
 gulp.task('watch', function() {
     gulp.watch( [statesJS, viewsJS], ['lint', 'scripts']);
@@ -125,6 +133,8 @@ gulp.task('watch', function() {
     gulp.watch( [statesPartials, viewsPartials], ['partials']);
     gulp.watch( states+"/assets/*.*", ['assets']);
     gulp.watch( 'src/core/assets/css/*.scss', ['core-sass']); 
+    gulp.watch( 'src/core/assets/js/*.js', ['core-js']); 
+
 });
 // Remove all files from build dir
 gulp.task('remove-it-all', function(){

@@ -17,6 +17,7 @@ MOBA.boot.prototype = {
 
     var myPlanetBuilder = new planetBuilder();
     MOBA.planets = myPlanetBuilder.buildPlanets();
+    MOBA.PlayerEmpire.homeWorld = myPlanetBuilder.getHomeWorld();
     // Maintain aspect ratio
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 

@@ -5,9 +5,13 @@
 * solar empire. 
 */
 
+var MOBA = MOBA || {};
+
 var PlayerEmpire = function() {
 	this.techCredits = 0;
 	this.foodCredits = 0;
+	this.planets = [];
+	this.homeWorld = {};
 }
 
 PlayerEmpire.prototype = {
@@ -21,3 +25,5 @@ PlayerEmpire.prototype = {
 	}
 
 }
+
+MOBA.PlayerEmpire = new PlayerEmpire();
