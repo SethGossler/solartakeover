@@ -34,7 +34,7 @@ itemKeeper.prototype = {
 			MOBA.PlayerEmpire.foodCredits -= item.cost.food;
 			planet.happiness -= item.cost.happiness;
 			planet.loyalty -= item.cost.loyalty;
-			planet.population -= item.cost.peope; 
+			planet.population -= item.cost.people; 
 			item.affect(planet, MOBA);
 			return item;
 		} else {
