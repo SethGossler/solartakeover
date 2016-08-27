@@ -3,6 +3,13 @@
 		<div class="stats">
 			<span> Tech Credits: {techCredits} </span>
 			<span> Food Credits: {foodCredits} </span>
-		</stats>
+		</div>
+		<div class="planets">
+			<h3> System Planets </h3>
+			<div rv-each-planet="planets" rv-on-click="showPlanet" rv-data-name="planet.name">
+				<span class="name">{planet.name}</span>
+				<span class="status">{planet.habitation}</span>
+			</div>
+		</div>
 	</div>
 </script>

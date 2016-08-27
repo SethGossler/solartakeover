@@ -1,6 +1,10 @@
 <script type="template" id="planet_tpl">
 
 	<div class="state-ui planet">
+		<div class="stats">
+			<span> Tech Credits: {techCredits} </span>
+			<span> Food Credits: {foodCredits} </span>
+		</div>
 
 		<div class="top">
 			<div class="zoom-out" rv-on-click="zoomOut">
@@ -17,8 +21,12 @@
 					</div>
 				</div>
 				<div class="level">
-					{ planet.level }
+					<span>{ planet.level }</span>
+					<div class="experience">
+						<span>{planet.experience}/{planet.neededExperience}</span>
+					</div>
 				</div>
+
 			</div>
 		</div>
 
@@ -35,7 +43,8 @@
 							Establish Farming Colony
 						</div>
 					</div>
-
+			</div>
+			<div rv-show="planet.habitation" class="resource-panel">
 					<div rv-show="planet.habitation" class="planet-stats">
 						<div class="population">
 							Population: { planet.population }

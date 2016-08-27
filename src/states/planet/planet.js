@@ -6,48 +6,54 @@ MOBA.planet.prototype = {
   // preload any files you didn't preload in the preload state.
   preload: function() {
     var self = this;
+    self.isActive = false;
+    $('body').on('back-hit', function(){
+      console.log('listeing');
+      if( self.isActive ) {
+        self.zoomOut();
+      }
+    });
   },
   
-  getIsColonizable: function() {
+  getColonyShipPlanet: function() {
+    var self = this;
 
-    // console.log('currplanet: ', MOBA.currentPlanet);
-    // console.log('lengthplanet: ', MOBA.planets.length);
-
-
-    if( MOBA.currentPlanet == MOBA.planets.length-1 ) {
-      var outerSibling = 0;
-    } else {
-      var outerSibling = MOBA.planets[MOBA.currentPlanet + 1].habitation;
+    var planetWithColonyShip = null;
+    if( self.outerSibling && (self.outerSibling.items.getItem('colony-ship') != undefined )) {
+      planetWithColonyShip = self.outerSibling;
+    } 
+    if( self.innerSibling && (self.innerSibling.items.getItem('colony-ship') != undefined )) {
+      planetWithColonyShip = self.innerSibling;
     }
-
-    if( MOBA.currentPlanet == 0 ) {
-      var innerSibling = 0;
-    } else {
-      var innerSibling = MOBA.planets[MOBA.currentPlanet - 1].habitation;
-    }
-
-    // console.log('outerSibling: ', MOBA.planets[MOBA.currentPlanet + 1].name, outerSibling, outerSibling > 0);
-    // console.log('innerSibling: ', MOBA.planets[MOBA.currentPlanet - 1].name, innerSibling, innerSibling > 0);
-
-      var isColonizable = (outerSibling > 0) || (innerSibling > 0); 
-
-    console.log('isColonizable', isColonizable);
-    return isColonizable;
+    return planetWithColonyShip;
   },
 
   // Create the scene
   create: function() { 
     var self = this;
+    self.isActive = true;
     self.currentPlanet = MOBA.planets[MOBA.currentPlanet];
-    
+    self.outerSibling = MOBA.planets[MOBA.currentPlanet + 1];
+    self.innerSibling = MOBA.planets[MOBA.currentPlanet - 1];
+    self.siblingWithColonyShip = self.getColonyShipPlanet();
+    //frontend model -- turn this into a "get planet model" function.
+    console.log( self.currentPlanet );
     self.model = {
-      colonizable: self.getIsColonizable(),
+      techCredits: MOBA.PlayerEmpire.techCredits,
+      foodCredits: MOBA.PlayerEmpire.foodCredits,
+      colonizable: self.siblingWithColonyShip != null && self.currentPlanet.habitation == 0,
       planet: self.currentPlanet,
       setStatus: function(){ self.setStatus(this); },
       setAbility: function(){ self.setAbility(this); },
       zoomOut: function(){ self.zoomOut(); },
       upgrade: function(){ var num = $(this).attr('data-upgrade-num'); self.upgradePlanet( num ); }
     };
+
+    self.updaterInterval = setInterval(function(){
+      self.model.techCredits = MOBA.PlayerEmpire.techCredits;
+      self.model.foodCredits = MOBA.PlayerEmpire.foodCredits;
+      self.model.colonizable = self.siblingWithColonyShip != null && self.currentPlanet.habitation == 0;
+    }, 100);
 
     rivets.formatters.statustext = function(value) {
       if( value == 0 ) {
@@ -121,7 +127,12 @@ MOBA.planet.prototype = {
   setStatus: function(el) {
     var self = this;
     var status = $(el).data("status");
-    self.currentPlanet.habitation = status;
+    if( self.siblingWithColonyShip.items.useItem('colony-ship') ) {
+      console.log("colonized!");
+      self.currentPlanet.habitation = status;
+    } else {
+      console.error('you tried to colonize without a colonship. Are you hacking?');
+    }
   },
 
   zoomOut: function() {
@@ -134,8 +145,27 @@ MOBA.planet.prototype = {
     self.$el = $($("#planet_tpl").html());
     rivets.bind(self.$el, self.model);
     $("#game_view").append(self.$el);
-    self.Space = game.add.sprite(0, 0, 'space_bg'); //2500x25000
-    self.planet = game.add.sprite( (1366/2) - (608/2), 50, self.currentPlanet.image);
+    self.Space = game.add.tileSprite(-300, -100, 8000, 8000, 'space_bg'); //4000x40000
+    
+    var planetRadius = window.innerWidth * .4;
+    planetRadius =  planetRadius + ( planetRadius * self.currentPlanet.scale );
+
+    self.planet = game.add.sprite( (window.innerWidth/2), (window.innerHeight/2), self.currentPlanet.image);
+    self.planet.anchor.setTo(0.5, 0.5);
+
+    self.planet.inputEnabled = true;
+    self.planet.events.onInputDown.add(function(planet){
+        MOBA.PlayerEmpire.addFoodCredits(1);
+        MOBA.PlayerEmpire.addTechCredits(1);
+        game.add.tween(planet.scale).to({ x: 0.97, y: 0.97}, 150, Phaser.Easing.Back.Out, true, 0);
+    }, this);
+    self.planet.events.onInputUp.add(function(planet){
+        game.add.tween(planet.scale).to({ x: 1, y: 1 }, 150, Phaser.Easing.Back.Out, true, 0);
+    });
+    
+    self.planet.width = planetRadius;
+    self.planet.height = planetRadius;
+    self.planet.scale = {x: 1, y:1};
     if( self.currentPlanet.tint ) {
       self.planet.tint = self.currentPlanet.tint;
     }
@@ -150,6 +180,7 @@ MOBA.planet.prototype = {
 
   shutdown: function() {
     var self = this;
+    self.isActive = false;
     self.$el.remove();
   }
 

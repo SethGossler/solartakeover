@@ -4,6 +4,19 @@
 .planet {
 	text-align: center;
 
+  .stats {
+    position: fixed;
+    top: 20px;
+    padding: 10px 5px;
+    left: 20px;
+		border: 2px solid rgba(50, 100, 200, 0.5);
+		span {
+			display: inline-block;
+			padding: 5px;
+			border: 2px solid rgba(50, 100, 200, 0.5);
+		}
+  }
+
 	.top {
 		position: absolute;
 		top: 20px;
@@ -13,14 +26,14 @@
 	}
 
 	.bottom {
-		position: absolute;
-		top: 768 - 453px;
+		position: fixed;
+		bottom: 40px;
 		left: 0px;
 		width: 100%;
 		.resource-panel {
 		}
 		&.colonized {
-			top: 616px;
+			// top: 616px;
 			.resource-panel {
 			}
 		}
@@ -40,6 +53,9 @@
 			font-size: 70px;
 			padding: 0px 16px;
 			background: rgba(50, 100, 200, 0.5);
+		}
+		.experience {
+			font-size: 16px;
 		}
 	}
 
@@ -61,8 +77,8 @@
 	}
 
 	.zoom-out {
-		position: absolute;
-		left: 50px;
+		position: fixed;
+		right: 20px;
 		top: 20px;
 		padding: 1em;
 		line-height: 1em;
@@ -92,7 +108,7 @@
 		}
 		.resource-generation {
 			float: left;
-			font-size: 40px;
+			font-size: 26px;
 			width: 50%;
 			height: 100%;
 		}
@@ -123,8 +139,8 @@
 	}
 
 	.inventory {
-		position: absolute;
-		top: 580px;
+		position: fixed;
+		bottom: 40px;
 		left: 20px;
 		width: 300px;
 		height: 150px;
@@ -166,8 +182,8 @@
 	}
 
 	.abilities {
-		position: absolute;
-		top: 580px;
+		position: fixed;
+		bottom: 40px;
 		right: 20px;
 		width: 300px;
 		height: 150px;
@@ -194,5 +210,26 @@
 
 		}
 
+	}
+}
+
+@media(max-width: 1000px) {
+	.planet {
+		.bottom {
+			bottom: 250px;
+		}
+		.inventory {
+			width: 47%;
+		}
+		.abilities {
+			width: 47%;
+		}
+		.planet-info {
+			position: fixed;
+			left: 50%;
+			top: 20%;
+			transform: translate(-50%, -10%);
+			display: inline-block;
+		}
 	}
 }

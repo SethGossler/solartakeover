@@ -13,7 +13,16 @@ MOBA.solar.prototype = {
     var self = this;
     self.model = {
       techCredits: MOBA.PlayerEmpire.techCredits,
-      foodCredits: MOBA.PlayerEmpire.foodCredits
+      foodCredits: MOBA.PlayerEmpire.foodCredits,
+      planets: MOBA.planets,
+      showPlanet: function(evt) {
+        var el = this;
+        var name = $(el).find('.name').html();
+        var planet = _.find(MOBA.planets, function(planet) {
+          return planet.name == name;
+        });
+        self.showPlanetDetail(MOBA.planets.indexOf(planet));
+       }
     };
     self.updaterInterval = setInterval(function(){
       self.model.techCredits = MOBA.PlayerEmpire.techCredits;
@@ -27,10 +36,11 @@ MOBA.solar.prototype = {
     self.worldScale = 1;
     MOBA.startGame();
     //setup world and camera
-    game.world.setBounds(0, 0, 2500, 2500);
+    game.world.setBounds(0, 0, 4000, 4000);
 
     if(MOBA.currentPlanet >= 0 ) {
       var prevPlanet = MOBA.planets[ MOBA.currentPlanet ];
+      console.log(MOBA.planets);
       self.update();
 
       var x = prevPlanet.x - 650;
@@ -44,18 +54,16 @@ MOBA.solar.prototype = {
 
       MOBA.currentPlanet = null;
     } else {
-      game.camera.x = 600;
-      game.camera.y = 900;
+      game.camera.x = 2000 - window.innerWidth/2;
+      game.camera.y = 2000 - window.innerHeight/2;
     }
 
     //add space background
-    self.Space = game.add.sprite(0, 0, 'space_bg'); //2500x25000
-    self.Space.scale.x = 1;
-    self.Space.scale.y = 1;
+    self.Space = game.add.tileSprite(-300, -100, 8000, 8000, 'space_bg'); //4000x40000
     //add planets
     self.addPlanets();
     //add our star
-    self.Star  = game.add.sprite(2500/2, 2500/2, 'solar-star');
+    self.Star  = game.add.sprite(4000/2, 4000/2, 'solar-star');
 
     self.bindings();
     self.renderLayout();
@@ -66,31 +74,54 @@ MOBA.solar.prototype = {
 
     self.planets = [];
     _.each(MOBA.planets, function(item, index){
+      var thisPlanetGroup = game.add.group();
+      var planetGlow = game.add.sprite( 0, 0, 'circle');
       var newPlanet = game.add.sprite( 0, 0, item.image);
-      newPlanet.anchor.setTo(0.5, 0.5);
 
-      newPlanet.index = index;
-      newPlanet.radius = item.radius;
-      newPlanet.period = item.period;
-      newPlanet.startOffset = item.startOffset;
+
+      thisPlanetGroup.add(planetGlow);
+      thisPlanetGroup.add(newPlanet);
+
+      newPlanet.anchor.setTo(0.5, 0.5);
+      planetGlow.anchor.setTo(0.5, 0.5);
+
+      thisPlanetGroup.index = index;
+      thisPlanetGroup.radius = item.radius;
+      thisPlanetGroup.period = item.period;
+      thisPlanetGroup.startOffset = item.startOffset;
+      thisPlanetGroup.model = item;
+
       newPlanet.scale.x = item.scale - 0.15;
       newPlanet.scale.y = item.scale - 0.15;
-      if( item.tint ) {
-        newPlanet.tint = item.tint;
-      }
+      planetGlow.scale.x = item.scale - 0.16;
+      planetGlow.scale.y = item.scale - 0.16;
+
+      var habitationTints = {
+        0:"0x333333", //nothing - gray
+        1:"0xffffff", //homeworld - white
+        2:"0x3333aa", //settlement - blue
+        3:"0xaa3333", //mining - red
+        4:"0x33aa33" //farms - green
+      };
+      planetGlow.tint = habitationTints[item.habitation];
+      
+
+      newPlanet.tint = item.tint;  
+
       newPlanet.inputEnabled = true;
-      newPlanet.model = item;
-      newPlanet.events.onInputDown.add(function(sprite){
-        self.showPlanetDetail(sprite);
+      newPlanet.events.onInputDown.add(function(planet){
+        self.showPlanetDetail(thisPlanetGroup.index);
       }, this);
-      self.planets.push(newPlanet);
+
+
+      self.planets.push(thisPlanetGroup);
     });
 
   },
 
-  showPlanetDetail: function(planetSprite) {
-    MOBA.currentPlanet = planetSprite.index;
-    MOBA.pauseGame();
+  showPlanetDetail: function(index) {
+    MOBA.currentPlanet = index;
+    // MOBA.pauseGame();
     game.state.start('planet');
   },
 
@@ -119,19 +150,30 @@ MOBA.solar.prototype = {
     var x = game.input.mousePointer.x;
     var y = game.input.mousePointer.y;
 
-    if( x > 0 && y > 0 ){
-      if( x < 100 ) {
-        game.camera.x -= 4;
-      }
-      if( x > 1266 ) {
-        game.camera.x += 4;
-      }
-      if( y > 668 ) {
-        game.camera.y += 4;
-      }
-      if( y < 100 ) {
-        game.camera.y -= 4;
-      }
+    // if( x > 0 && y > 0 ){
+    //   if( x < 100 ) {
+    //     game.camera.x -= 4;
+    //   }
+    //   if( x > 1266 ) {
+    //     game.camera.x += 4;
+    //   }
+    //   if( y > 668 ) {
+    //     game.camera.y += 4;
+    //   }
+    //   if( y < 100 ) {
+    //     game.camera.y -= 4;
+    //   }
+    // }
+
+    if (this.game.input.activePointer.isDown) {  
+      if (this.game.origDragPoint) {    
+        // move the camera by the amount the mouse has moved since last update
+        this.game.camera.x += this.game.origDragPoint.x - this.game.input.activePointer.position.x;   
+        this.game.camera.y += this.game.origDragPoint.y - this.game.input.activePointer.position.y;  
+      }  // set new drag origin to current position  
+      this.game.origDragPoint = this.game.input.activePointer.position.clone();
+    } else {  
+      this.game.origDragPoint = null;
     }
 
     if (game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
@@ -147,16 +189,14 @@ MOBA.solar.prototype = {
         game.camera.x += 4;
     }
 
-    // Planet Rotation of this states planet sprites (not to be confused with MOBA.planets);
-    _.each(self.planets, function(planetSprite){
-      var relativeTimePeriod = ( game.time.now * (planetSprite.period * 0.0001) ) + ( planetSprite.startOffset * 3.14159265359 );
-      planetSprite.x = game.world.centerX + Math.cos(relativeTimePeriod) * planetSprite.radius;
-      planetSprite.y = game.world.centerY + Math.sin(relativeTimePeriod) * planetSprite.radius;
-      // planetSprite.angle += 0.8 - (1 * planetSprite.model.scale);
-      // console.log( planetSprite.angle );
-      planetSprite.model.x = planetSprite.x;
-      planetSprite.model.y = planetSprite.y;
-
+    // Planet Rotation of this states planet groups (not to be confused with MOBA.planets);
+    _.each(self.planets, function(planetGroup){
+      var relativeTimePeriod = ( game.time.now * (planetGroup.period * 0.0001) ) + ( planetGroup.startOffset * 3.14159265359 );
+      planetGroup.x = game.world.centerX + Math.cos(relativeTimePeriod) * planetGroup.radius;
+      planetGroup.y = game.world.centerY + Math.sin(relativeTimePeriod) * planetGroup.radius;
+      // planetGroup.angle += 0.8 - (1 * planetGroup.model.scale); //disabled until there's dynamic lighting
+      planetGroup.model.x = planetGroup.x;
+      planetGroup.model.y = planetGroup.y;
     });
 
     // zoom

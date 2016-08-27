@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "backbone": "^1.3.3",
     "bower": "*",
     "connect-livereload": "*",
     "del": "*",
@@ -22,6 +23,7 @@
     "gulp-sass": "*",
     "gulp-uglify": "*",
     "gulp-util": "^3.0.3",
+    "jade": "^1.11.0",
     "tiny-lr": "*"
   }
 }

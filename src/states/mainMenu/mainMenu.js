@@ -29,6 +29,7 @@ MOBA.mainMenu.prototype = {
   bindings: function() {
     var self = this;
     self.$el.on('click', '.start.btn', function(){
+      window.router.navigate('game', {trigger:true});
       self.state.start('solar');  
     });
 

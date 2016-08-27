@@ -1,7 +1,25 @@
 .solar {
   .stats {
-    position: absolute;
-    top: 5px;
-    left: 5px;
+    position: fixed;
+    top: 20px;
+    padding: 10px 5px;
+    left: 20px;
+		border: 2px solid rgba(50, 100, 200, 0.5);
+		span {
+			display: inline-block;
+			padding: 5px;
+			border: 2px solid rgba(50, 100, 200, 0.5);
+		}
+  }
+  .planets {
+  	position: fixed;
+  	top: 20px;
+  	right: 20px;
+  	padding: 5px;
+  	text-align: left;
+		border: 2px solid rgba(50, 100, 200, 0.5);
+		h3 {
+			margin: 0px;
+		}
   }
 }

@@ -25,8 +25,9 @@ var planetBuilder = function(){
 
 	this.homeWorld = null; //will have it when construted.
 	this.planets = []; //will add planets when constructed
+	this.minRadiusDist = 250;
 	this.maxRadiusDist = 1200; //more ore less, the # of pixels from the sun.
-	this.avgRadiusDist = 700; // Where the "big" planets should live.
+	this.avgRadiusDist = 1200; // Where the "big" planets should live.
 };
 
 planetBuilder.prototype = {
@@ -37,7 +38,7 @@ planetBuilder.prototype = {
 		// Build this new solar system of planets. The first one will be our home world.
 		var numberOfPlanets = 7;//_.random(12);
 		for( var i = 0; i < numberOfPlanets; i++ ) {
-			newPlanets.push( this.buildNewPlanet() );
+			newPlanets.push( this.buildNewPlanet(i) );
 		}
 		// first Planet is the "homeworld"
 		newPlanets[0].habitation = 1;
@@ -56,8 +57,9 @@ planetBuilder.prototype = {
 		return sortedPlanets;
 	},
 
-	buildNewPlanet: function() {
+	buildNewPlanet: function(index) {
 		var newPlanet = {};
+		newPlanet.index = index;
 		newPlanet.name = this.generatePlanetName();
 		newPlanet.radius = this.generateRadius(newPlanet);
 		newPlanet.scale = this.generateScale(newPlanet);
@@ -67,9 +69,11 @@ planetBuilder.prototype = {
 		newPlanet.period = this.generatePeriod(newPlanet);
 		newPlanet.habitation = 0;
 		newPlanet.upgrades = new this.UpgradeMechanism(newPlanet);
-		newPlanet.level = 0;
+		newPlanet.level = 1;
+		newPlanet.experience = 0;
+		newPlanet.neededExperience = 2000;
 		newPlanet.loyalty = 100;
-		newPlanet.resourceGeneration = 0; //based on loyalty, happiness, item buffs, planet level, and planet upgrades
+		newPlanet.resourceGeneration = ""; //based on loyalty, happiness, item buffs, planet level, and planet upgrades
 		newPlanet.happiness = 100;
 		newPlanet.population = 0;
 		newPlanet.items = new this.ItemMechanism(newPlanet);
@@ -109,10 +113,45 @@ planetBuilder.prototype = {
 			thisPlanet.happiness = thisPlanet.happiness > 100 ? 100 : thisPlanet.happiness;
 			thisPlanet.loyalty = thisPlanet.loyalty > 100 ? 100 : thisPlanet.loyalty;
 
+			// Gain xp, and level up.
 			if( thisPlanet.happiness > 80 && this.loyalty > 80 ) {
-				MOBA.PlayerEmpire.addFoodCredits(20);
-				MOBA.PlayerEmpire.addTechCredits(20);
-				console.log('Todos:\nBuild a "Store" for buying items.\nMake a planet Process object, or some way to handle complex game logic.\nMake colonizing more dynamic.')
+				thisPlanet.experience += 10;
+				if(thisPlanet.experience >= thisPlanet.neededExperience) {
+					thisPlanet.level++;
+					thisPlanet.experience = 0;
+					thisPlanet.neededExperience += 500;
+				}
+			}
+
+			thisPlanet.resourceGeneration = "rioting";
+
+			// homework credits
+			if( thisPlanet.happiness > 80 && this.loyalty > 80 && thisPlanet.habitation == 1 ) {
+				MOBA.PlayerEmpire.addFoodCredits(2);
+				MOBA.PlayerEmpire.addTechCredits(2);
+				console.log('here');
+				thisPlanet.resourceGeneration = "2 Food / 2 Tech";
+			}
+
+			// settlement colony credits
+			if( thisPlanet.happiness > 80 && this.loyalty > 80 && thisPlanet.habitation == 2 ) {
+				MOBA.PlayerEmpire.addFoodCredits(1);
+				MOBA.PlayerEmpire.addTechCredits(1);
+				thisPlanet.resourceGeneration = "1 Food / 1 Tech";
+			}
+
+			// mining coloy rdits
+			if( thisPlanet.happiness > 80 && this.loyalty > 80 && thisPlanet.habitation == 3 ) {
+				MOBA.PlayerEmpire.addFoodCredits(0);
+				MOBA.PlayerEmpire.addTechCredits(2);
+				thisPlanet.resourceGeneration = "2 Tech";
+			}
+
+			// farm colony credits
+			if( thisPlanet.happiness > 80 && this.loyalty > 80 && thisPlanet.habitation == 4 ) {
+				MOBA.PlayerEmpire.addFoodCredits(2);
+				MOBA.PlayerEmpire.addTechCredits(0);
+				thisPlanet.resourceGeneration = "2 Food"
 			}
 
 			console.log( 'process:', thisPlanet );
@@ -140,9 +179,36 @@ planetBuilder.prototype = {
 				self.defenseItems.push( item );
 			} else if( item.type == "production" ) {
 				self.productionItems.push( item );
+			}else {
+				console.error("Trying to add a bad type of item.")
 			}
 		};
-
+		self.getItem = function(itemName) {
+			var allItems = self.socialItems.concat(self.defenseItems, self.productionItems);
+			var item = _.find( allItems, function(anItem){
+				return anItem.name == itemName;
+			});
+			return item;
+		};
+		self.useItem = function(itemName) {
+			var item = self.getItem(itemName);
+			if( item != undefined ) {
+				var itemList = null;
+				if( item.type == "social" ) {
+					itemList = self.socialItems;
+				} else if( item.type == "defense" ) {
+					itemList = self.defenseItems;
+				} else if( item.type == "production" ) {
+					itemList = self.productionItems;
+				}
+				var index = itemList.indexOf(item);
+				console.log('ITEM USED!', item);
+				return itemList.splice(index, 1);
+			} else {
+				console.log('Could not find item', itemName);
+				return undefined;
+			}
+		};
 	},
 
 
@@ -172,8 +238,8 @@ planetBuilder.prototype = {
 		return Math.abs(scale);
 	},
 
-	generateRadius: function() {
-		var radius = _.random(250, this.maxRadiusDist);
+	generateRadius: function(index) {
+		var radius = _.random(this.minRadiusDist, this.maxRadiusDist);
 		return radius;
 	},
 
