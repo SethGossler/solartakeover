@@ -16,7 +16,9 @@ MOBA.mainMenu.prototype = {
     self.renderLayout();
     // Add background
     self.bgSprite = game.add.sprite(0, 0, 'menu_bg');
-
+    window.setTimeout(function(){
+      self.$el.addClass('ready');
+    },500);
   },
 
   // Create and show your view
