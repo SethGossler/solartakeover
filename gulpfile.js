@@ -103,15 +103,14 @@ gulp.task('assets', function() {
 });
 // move core files
 gulp.task('core', function() {
-    console.log(" ProMoba Team Manager ");
-    return gulp.src( ['src/core/**', "!src/core/assets/css/**"], {base:'./src/core/'} )
+    return gulp.src( ['src/core/**', "!src/core/assets/css/**, !src/core/index.html"], {base:'./src/core/'} )
         .pipe(plumber({errorHandler: plumberErrorHandler}))
         .pipe(gulp.dest('build'))
         .pipe(ifElse( !_building, liveReload ));
 });
 // Compile Our Core Sass Sass
 gulp.task('core-sass', function() {
-    return gulp.src( 'src/core/assets/css/*.scss', {base:'./src/core/'} )
+    return gulp.src( 'src/core/assets/css/*.*' )
         .pipe(plumber({errorHandler: plumberErrorHandler}))
         .pipe(sass())
         .pipe(concat('core.css'))
@@ -120,7 +119,7 @@ gulp.task('core-sass', function() {
 });
 // compile our core js files
 gulp.task('core-js', function() {
-    return gulp.src( 'src/core/assets/js/*.js', {base:'./src/core/'} )
+    return gulp.src( 'src/core/assets/js/*.*' )
         .pipe(plumber({errorHandler: plumberErrorHandler}))
         .pipe(gulp.dest( 'build/assets/js/' ))
         .pipe(ifElse( !_building, liveReload ));
@@ -133,7 +132,7 @@ gulp.task('watch', function() {
     gulp.watch( [statesPartials, viewsPartials], ['partials']);
     gulp.watch( states+"/assets/*.*", ['assets']);
     gulp.watch( 'src/core/assets/css/*.scss', ['core-sass']); 
-    gulp.watch( 'src/core/assets/js/*.js', ['core-js']); 
+    gulp.watch( 'src/core/assets/js/*.*', ['core-js']); 
 
 });
 // Remove all files from build dir
@@ -142,7 +141,6 @@ gulp.task('remove-it-all', function(){
 });
 // Run our server
 gulp.task('server', function() {
-    console.log(" Server On Port 3000 ");
     app.use(require('connect-livereload')());
     app.use(express.static(__dirname + '/build'));
     app.listen(3000);
@@ -154,6 +152,8 @@ gulp.task('server', function() {
 gulp.task('default', ['core', 'core-sass', 'partials', 'sass', 'scripts', 'assets', 'watch', 'server'], function(){
     //# dependency tasks are done
     // ..so we're not building anymore
+    console.log(" Solar Takeover ");
+    console.log(" Server On Port 3000 ");
     _building = false;
 });
 // Build out files without watch

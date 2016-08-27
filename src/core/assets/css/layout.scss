@@ -5,6 +5,8 @@ body, html {
 	background: #000;
 	min-width: 100%;
 	min-height: 100%;
+	cursor: url('../img/cursor.png'), auto;
+	
 }
 #game_view {
 	position: relative;
@@ -12,7 +14,6 @@ body, html {
 	top:20px;
 	left: 0;
 	width: 100%;
-	cursor: url('../img/cursor.png'), auto;
 	z-index: 2;
 }
 canvas {
@@ -23,7 +24,6 @@ canvas {
 }
 
 #game_view * {
-	cursor: url('../img/cursor.png'), auto;
 }
 .state-ui {
 	position: absolute;

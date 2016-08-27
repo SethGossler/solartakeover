@@ -9,15 +9,17 @@ MOBA.mainMenu.prototype = {
   },
   // Create the scene
   create: function() { 
+    console.log('mainMenu');
     var self = this;
     self._tpl = $("#mainMenu_tpl");
     self.$el = $(self._tpl.html());
     self.bindings();
     self.renderLayout();
-    // Add background
-    self.bgSprite = game.add.sprite(0, 0, 'menu_bg');
     window.setTimeout(function(){
       self.$el.addClass('ready');
+      setTimeout(function(){
+        self.$el.addClass('scene-1');
+      },1500);
     },500);
   },
 
@@ -32,7 +34,10 @@ MOBA.mainMenu.prototype = {
     var self = this;
     self.$el.on('click', '.start.btn', function(){
       window.router.navigate('game', {trigger:true});
-      self.state.start('solar');  
+      self.$el.removeClass('ready');
+      setTimeout(function(){
+        self.state.start('solar');  
+      },1000);
     });
 
   },

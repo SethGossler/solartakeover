@@ -36,6 +36,8 @@ MOBA.planet.prototype = {
     self.outerSibling = MOBA.planets[MOBA.currentPlanet + 1];
     self.innerSibling = MOBA.planets[MOBA.currentPlanet - 1];
     self.siblingWithColonyShip = self.getColonyShipPlanet();
+    self.possibleItems = MOBA.itemKeeper.getPlanetItems(self.currentPlanet);
+    console.log(self.possibleItems);
     //frontend model -- turn this into a "get planet model" function.
     console.log( self.currentPlanet );
     self.model = {
@@ -43,6 +45,7 @@ MOBA.planet.prototype = {
       foodCredits: MOBA.PlayerEmpire.foodCredits,
       colonizable: self.siblingWithColonyShip != null && self.currentPlanet.habitation == 0,
       planet: self.currentPlanet,
+      items: self.possibleItems,
       setStatus: function(){ self.setStatus(this); },
       setAbility: function(){ self.setAbility(this); },
       zoomOut: function(){ self.zoomOut(); },
@@ -96,25 +99,33 @@ MOBA.planet.prototype = {
   },
 
   setAbility: function(abilityTile) {
+    var self = this;
     var $tile = $(abilityTile);
     var typeOfTile = $tile.attr('data-type');
 
     if(typeOfTile == 'item') {
       var itemName = $tile.attr('data-item');
-      
-      if( itemName == 'colony-ship' ) { //buying a colony ship
-        if(MOBA.PlayerEmpire.techCredits >= 100 && MOBA.PlayerEmpire.foodCredits >= 100 ) {
-          MOBA.PlayerEmpire.techCredits = MOBA.PlayerEmpire.techCredits - 100;
-          MOBA.PlayerEmpire.foodCredits = MOBA.PlayerEmpire.foodCredits - 100;
-          this.currentPlanet.items.addItem({
-            name: 'colony-ship',
-            alias: 'Colony Ship',
-            type: 'production'
-          }) 
-        } else {
-          console.log( 'cant buy ship!' );
-        }
+      console.log('buy', itemName);      
+      var item = MOBA.itemKeeper.buyPlanetItem(itemName, self.currentPlanet);
+      if( item ) {
+        console.log('got the item !', item);
+        this.currentPlanet.items.addItem(item);
+      } else {
+        console.log('didnt get the item :(');
       }
+      // if( itemName == 'colony-ship' ) { //buying a colony ship
+      //   if(MOBA.PlayerEmpire.techCredits >= 100 && MOBA.PlayerEmpire.foodCredits >= 100 ) {
+      //     MOBA.PlayerEmpire.techCredits = MOBA.PlayerEmpire.techCredits - 100;
+      //     MOBA.PlayerEmpire.foodCredits = MOBA.PlayerEmpire.foodCredits - 100;
+      //     this.currentPlanet.items.addItem({
+      //       name: 'colony-ship',
+      //       alias: 'Colony Ship',
+      //       type: 'production'
+      //     }) 
+      //   } else {
+      //     console.log( 'cant buy ship!' );
+      //   }
+      // }
 
     }
   },
@@ -157,6 +168,7 @@ MOBA.planet.prototype = {
     self.planet.events.onInputDown.add(function(planet){
         MOBA.PlayerEmpire.addFoodCredits(1);
         MOBA.PlayerEmpire.addTechCredits(1);
+        self.currentPlanet.experience++;
         game.add.tween(planet.scale).to({ x: 0.97, y: 0.97}, 150, Phaser.Easing.Back.Out, true, 0);
     }, this);
     self.planet.events.onInputUp.add(function(planet){

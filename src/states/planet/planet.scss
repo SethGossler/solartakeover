@@ -196,6 +196,22 @@
 			margin-left: 1.5%;
 			margin-top: 1%;
 			border: 2px solid rgba(50, 100, 200, 0.5);
+			.requirements {
+				display: none;
+				text-align: left;
+			}
+			&:hover .requirements {
+				display: block;
+				position: absolute;
+				top: -100%;
+				left: -100%;
+				background: rgba(0,0,0,0.5);
+				color: #fff;
+				border: 2px solid rgba(200, 200, 200, 0.5);
+				span {
+					display: block;
+				}
+			}
 		}
 
 		h3 {

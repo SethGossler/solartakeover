@@ -71,7 +71,8 @@ planetBuilder.prototype = {
 		newPlanet.upgrades = new this.UpgradeMechanism(newPlanet);
 		newPlanet.level = 1;
 		newPlanet.experience = 0;
-		newPlanet.neededExperience = 2000;
+		newPlanet.experiencePerTick = 1;
+		newPlanet.neededExperience = 200;
 		newPlanet.loyalty = 100;
 		newPlanet.resourceGeneration = ""; //based on loyalty, happiness, item buffs, planet level, and planet upgrades
 		newPlanet.happiness = 100;
@@ -115,11 +116,11 @@ planetBuilder.prototype = {
 
 			// Gain xp, and level up.
 			if( thisPlanet.happiness > 80 && this.loyalty > 80 ) {
-				thisPlanet.experience += 10;
+				thisPlanet.experience += thisPlanet.experiencePerTick;
 				if(thisPlanet.experience >= thisPlanet.neededExperience) {
 					thisPlanet.level++;
 					thisPlanet.experience = 0;
-					thisPlanet.neededExperience += 500;
+					thisPlanet.neededExperience += thisPlanet.level * 500;
 				}
 			}
 

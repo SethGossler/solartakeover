@@ -11,6 +11,7 @@ MOBA.boot.prototype = {
 
   create: function() { 
     var self = this;
+    console.log('boot');
     //loading screen will have a black background
     self.game.stage.backgroundColor = '#000';  
     self.state.start('Preload');  
@@ -18,6 +19,10 @@ MOBA.boot.prototype = {
     var myPlanetBuilder = new planetBuilder();
     MOBA.planets = myPlanetBuilder.buildPlanets();
     MOBA.PlayerEmpire.homeWorld = myPlanetBuilder.getHomeWorld();
+
+    var myItemKeeper = new itemKeeper();
+    MOBA.itemKeeper = myItemKeeper;
+
     // Maintain aspect ratio
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
