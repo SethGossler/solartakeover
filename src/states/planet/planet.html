@@ -65,19 +65,10 @@
 		</div>
 
 		<div rv-show="planet.habitation" class="inventory">
-			<h3> Inventory </h3>
-			<div class="social-items">
-				<div class="item">
-				</div>
-				<div class="item">
-				</div>
-				<div class="item">
-				</div>
-			</div>
-			<div class="defense-items">
-				<div class="item">
-				</div>
-				<div class="item">
+			<div class="production-items">
+				<h3> Production Items </h3>
+				<div class="item" rv-each-inv="ownedItems.productionItems">
+					{inv.alias}
 				</div>
 			</div>
 		</div> 

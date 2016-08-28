@@ -144,7 +144,7 @@
 		left: 20px;
 		width: 300px;
 		height: 150px;
-		// border: 5px solid rgba(50, 100, 200, 0.2);
+		border: 5px solid rgba(50, 100, 200, 0.2);
 		.social-items {
 			@include clearfix();
 			.item {
@@ -155,6 +155,17 @@
 				border: 2px solid rgba(50, 100, 200, 0.5);
 			}
 		}
+		.production-items {
+			@include clearfix();
+			.item {
+				float: left;
+				width: 30%;
+				height: 50%;
+				margin-left: 1.5%;
+				border: 2px solid rgba(50, 100, 200, 0.5);
+			}
+		}
+
 		.defense-items {
 			margin-top: 5px;
 			@include clearfix();
@@ -187,7 +198,7 @@
 		right: 20px;
 		width: 300px;
 		height: 150px;
-		// border: 5px solid rgba(50, 100, 200, 0.2);
+		border: 5px solid rgba(50, 100, 200, 0.2);
 		@include clearfix();
 		.ability {
 			float: left;

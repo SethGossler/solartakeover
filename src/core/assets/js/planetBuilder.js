@@ -155,7 +155,7 @@ planetBuilder.prototype = {
 				thisPlanet.resourceGeneration = "2 Food"
 			}
 
-			console.log( 'process:', thisPlanet );
+			// console.log( 'process:', thisPlanet );
 
 		};
 	},

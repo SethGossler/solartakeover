@@ -37,15 +37,15 @@ MOBA.planet.prototype = {
     self.innerSibling = MOBA.planets[MOBA.currentPlanet - 1];
     self.siblingWithColonyShip = self.getColonyShipPlanet();
     self.possibleItems = MOBA.itemKeeper.getPlanetItems(self.currentPlanet);
-    console.log(self.possibleItems);
     //frontend model -- turn this into a "get planet model" function.
-    console.log( self.currentPlanet );
+    console.log( self.currentPlanet.items.productionItems );
     self.model = {
       techCredits: MOBA.PlayerEmpire.techCredits,
       foodCredits: MOBA.PlayerEmpire.foodCredits,
       colonizable: self.siblingWithColonyShip != null && self.currentPlanet.habitation == 0,
       planet: self.currentPlanet,
       items: self.possibleItems,
+      ownedItems: self.currentPlanet.items,
       setStatus: function(){ self.setStatus(this); },
       setAbility: function(){ self.setAbility(this); },
       zoomOut: function(){ self.zoomOut(); },
