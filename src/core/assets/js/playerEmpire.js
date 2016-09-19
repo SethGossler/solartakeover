@@ -10,6 +10,7 @@ var MOBA = MOBA || {};
 var PlayerEmpire = function() {
 	this.techCredits = 0;
 	this.foodCredits = 0;
+	this.mineralCredits = 0;
 	this.planets = [];
 	this.homeWorld = {};
 }
@@ -17,12 +18,17 @@ var PlayerEmpire = function() {
 PlayerEmpire.prototype = {
 
 	addFoodCredits: function(newFoodCredits) {
-		this.foodCredits = this.foodCredits + newFoodCredits;
+		this.foodCredits += newFoodCredits;
 	},
 
 	addTechCredits: function(newTechCredits) {
-		this.techCredits = this.techCredits + newTechCredits;
+		this.techCredits += newTechCredits;
+	},
+
+	addMineralCredits: function(newMineralCredits) {
+		this.mineralCredits += newMineralCredits;
 	}
+
 
 }
 

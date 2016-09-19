@@ -14,6 +14,7 @@ MOBA.solar.prototype = {
     self.model = {
       techCredits: MOBA.PlayerEmpire.techCredits,
       foodCredits: MOBA.PlayerEmpire.foodCredits,
+      mineralCredits: MOBA.PlayerEmpire.mineralCredits,
       planets: MOBA.planets,
       showPlanet: function(evt) {
         var el = this;
@@ -27,6 +28,7 @@ MOBA.solar.prototype = {
     self.updaterInterval = setInterval(function(){
       self.model.techCredits = MOBA.PlayerEmpire.techCredits;
       self.model.foodCredits = MOBA.PlayerEmpire.foodCredits;
+      self.model.mineralCredits = MOBA.PlayerEmpire.mineralCredits;
     },500);
 
     self._tpl = $("#solar_tpl");

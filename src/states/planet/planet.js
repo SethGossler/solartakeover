@@ -38,10 +38,11 @@ MOBA.planet.prototype = {
     self.siblingWithColonyShip = self.getColonyShipPlanet();
     self.possibleItems = MOBA.itemKeeper.getPlanetItems(self.currentPlanet);
     //frontend model -- turn this into a "get planet model" function.
-    console.log( self.currentPlanet.items.productionItems );
+
     self.model = {
       techCredits: MOBA.PlayerEmpire.techCredits,
       foodCredits: MOBA.PlayerEmpire.foodCredits,
+      mineralCredits: MOBA.PlayerEmpire.mineralCredits,
       colonizable: self.siblingWithColonyShip != null && self.currentPlanet.habitation == 0,
       planet: self.currentPlanet,
       items: self.possibleItems,
@@ -53,6 +54,7 @@ MOBA.planet.prototype = {
     };
 
     self.updaterInterval = setInterval(function(){
+      mineralCredits: MOBA.PlayerEmpire.mineralCredits;
       self.model.techCredits = MOBA.PlayerEmpire.techCredits;
       self.model.foodCredits = MOBA.PlayerEmpire.foodCredits;
       self.model.colonizable = self.siblingWithColonyShip != null && self.currentPlanet.habitation == 0;
@@ -166,10 +168,10 @@ MOBA.planet.prototype = {
 
     self.planet.inputEnabled = true;
     self.planet.events.onInputDown.add(function(planet){
-        MOBA.PlayerEmpire.addFoodCredits(1);
-        MOBA.PlayerEmpire.addTechCredits(1);
-        self.currentPlanet.experience++;
-        game.add.tween(planet.scale).to({ x: 0.97, y: 0.97}, 150, Phaser.Easing.Back.Out, true, 0);
+
+      self.currentPlanet.clickProcess();
+      game.add.tween(planet.scale).to({ x: 0.97, y: 0.97}, 150, Phaser.Easing.Back.Out, true, 0);
+    
     }, this);
     self.planet.events.onInputUp.add(function(planet){
         game.add.tween(planet.scale).to({ x: 1, y: 1 }, 150, Phaser.Easing.Back.Out, true, 0);

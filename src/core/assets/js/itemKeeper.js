@@ -8,10 +8,10 @@ itemKeeper.prototype = {
 		console.log('get getPlanetItems', planet);
 		var possibleItems = _.filter(ITEMS, function(item) {
 			var isPossible = false;
-			// console.log('test',  item.levelRequirement < (planet.level+1));
-			// console.log('test2', isPossible || item.habitationTypes[planet.habitation] > 0);
+			// console.log('test',  item.levelRequirement <= (planet.level+1));
+			// console.log('test2', item.habitationTypes.indexOf(planet.habitation), item.habitationTypes, planet.habitation);
 			isPossible = item.levelRequirement <= (planet.level+1); //returning items possible next level
-			isPossible = isPossible && item.habitationTypes[planet.habitation] > 0;
+			isPossible = isPossible && item.habitationTypes.indexOf(planet.habitation) >= 0;
 			return isPossible;
 		});
 		return possibleItems;
@@ -23,7 +23,7 @@ itemKeeper.prototype = {
 			return item.name ==itemName;
 		});
 		var correctLevel = item.levelRequirement <= planet.level; 
-		var correctHabitat = item.habitationTypes[planet.habitation] > 0 
+		var correctHabitat = item.habitationTypes.indexOf(planet.habitation) >= 0;
 		var gotTheGoods = item.cost.tech <= MOBA.PlayerEmpire.techCredits;
 		gotTheGoods = gotTheGoods && item.cost.food <= MOBA.PlayerEmpire.foodCredits;
 		gotTheGoods = gotTheGoods && item.cost.happiness <= planet.happiness;
@@ -35,7 +35,9 @@ itemKeeper.prototype = {
 			planet.happiness -= item.cost.happiness;
 			planet.loyalty -= item.cost.loyalty;
 			planet.population -= item.cost.people; 
-			item.affect(planet, MOBA);
+			if(item.affect){
+				item.affect(planet, MOBA);
+			}
 			return item;
 		} else {
 			console.log('You cant buy this!');
@@ -45,6 +47,45 @@ itemKeeper.prototype = {
 }
 
 var ITEMS = [
+	{
+		name: 'mining-upgrade-1',
+		alias: 'Mining Upgrad 1',
+		type: 'production',
+		levelRequirement: 3,
+		habitationTypes: [3],
+		cost: {
+			food: 100,
+			tech: 100,
+			loyalty: 0,
+			happiness: 0,
+			people: 0
+		},
+		description: "First upgrade for mining colonies",
+		affect: function(planet, MOBA, options) {
+			MOBA.PlayerEmpire.addMineralCredits( 100 );
+		}
+	},
+	{
+		name: 'early-clicker',
+		alias: 'Early Clicker',
+		type: 'production',
+		levelRequirement: 1,
+		habitationTypes: [1],
+		cost: {
+			food: 10,
+			tech: 10,
+			loyalty: 0,
+			happiness: 0,
+			people: 0
+		},
+		description: "Early Planet Clicker Upgrade",
+		clickAffect: function(planet, MOBA, options) {
+			MOBA.PlayerEmpire.addFoodCredits( 1 );
+			MOBA.PlayerEmpire.addTechCredits( 1 );
+			planet.experience++;
+		}
+
+	},
 	{
 		name:'colony-ship',
 		alias:'Colony Ship',
@@ -59,7 +100,7 @@ var ITEMS = [
 			people: 2
 		},
 		description: "Provides a ship to colonize other planets",
-		affect: function(){
+		affect: function(planet, MOBA, options){
 			console.log('Colony ships dont have affects');
 		}
 	},
@@ -77,7 +118,7 @@ var ITEMS = [
 			people: 0
 		},
 		description: "Bumps a planets experience growth by 10.",
-		affect: function(planet, MOBA){
+		affect: function(planet, MOBA, options){
 			planet.experiencePerTick += 10;
 			console.log('space ports will add more experience per sec');
 		}

@@ -79,7 +79,25 @@ planetBuilder.prototype = {
 		newPlanet.population = 0;
 		newPlanet.items = new this.ItemMechanism(newPlanet);
 		newPlanet.process = this.process(newPlanet);
+		newPlanet.homeWorldProcess = this.homeWorldProcess;
+		newPlanet.settlementProcess = this.settlementProcess;
+		newPlanet.miningProcess = this.miningProcess;
+		newPlanet.farmingProcess = this.farmingProcess;
+		newPlanet.clickProcess = this.clickProcess(newPlanet);
+
+
 		return newPlanet;
+	},
+
+	clickProcess: function(thisPlanet) {
+		return function() {
+			console.log("test", thisPlanet);
+			for( var i = 0; i < thisPlanet.items.productionItems.length; i++ ) {
+				if( thisPlanet.items && thisPlanet.items.productionItems[i] && thisPlanet.items.productionItems[i].clickAffect ) {
+					thisPlanet.items.productionItems[i].clickAffect(thisPlanet, MOBA);
+				}
+			};
+		};
 	},
 
 	process: function(thisPlanet) {
@@ -87,16 +105,16 @@ planetBuilder.prototype = {
 			if(thisPlanet.habitation == 0 ) {
 				return -1; //no op;
 			}
+			//
+			// Generic Planet Processing
+			//
 
-			// if too populated (> 5 billion), reduce happiness
-			if( thisPlanet.population > (5 * Math.pow(10, 9)) ) {
-				thisPlanet.happiness--;
-			}
-
+			// Planet needs to be mostly loyal, else they lose happiness
 			if( thisPlanet.loyalty < 50 ) {
 				thisPlanet.happiness--;
 			}
 
+			// Planet population changes based on happiness.
 			if ( thisPlanet.happiness >= 75 ) {
 				thisPlanet.population++;
 			} else if ( thisPlanet.happiness < 75 && thisPlanet.happiness > 50 ) {
@@ -105,59 +123,103 @@ planetBuilder.prototype = {
 				thisPlanet.population--;
 				thisPlanet.loyalty--;
 			}
-
-			if ( thisPlanet.habitation == 1 ) {
-				thisPlanet.loyalty++;
-				thisPlanet.happiness++;
-			}
-
-			thisPlanet.happiness = thisPlanet.happiness > 100 ? 100 : thisPlanet.happiness;
-			thisPlanet.loyalty = thisPlanet.loyalty > 100 ? 100 : thisPlanet.loyalty;
-
-			// Gain xp, and level up.
+			// Gain xp
 			if( thisPlanet.happiness > 80 && this.loyalty > 80 ) {
 				thisPlanet.experience += thisPlanet.experiencePerTick;
-				if(thisPlanet.experience >= thisPlanet.neededExperience) {
-					thisPlanet.level++;
-					thisPlanet.experience = 0;
-					thisPlanet.neededExperience += thisPlanet.level * 500;
-				}
+			}
+			//Level up
+			if(thisPlanet.experience >= thisPlanet.neededExperience) {
+				thisPlanet.level++;
+				thisPlanet.experience = 0;
+				thisPlanet.neededExperience += thisPlanet.level * 500;
 			}
 
-			thisPlanet.resourceGeneration = "rioting";
-
+			//
+			// Specific planet processing.
+			//
 			// homework credits
-			if( thisPlanet.happiness > 80 && this.loyalty > 80 && thisPlanet.habitation == 1 ) {
-				MOBA.PlayerEmpire.addFoodCredits(2);
-				MOBA.PlayerEmpire.addTechCredits(2);
-				console.log('here');
-				thisPlanet.resourceGeneration = "2 Food / 2 Tech";
+			if( thisPlanet.habitation == 1) {
+				thisPlanet = thisPlanet.homeWorldProcess(thisPlanet);
+			}
+			if( thisPlanet.habitation == 2 ) {
+				thisPlanet = thisPlanet.settlementProcess(thisPlanet);
+			}
+			if( thisPlanet.habitation == 3 ) {
+				thisPlanet = thisPlanet.miningProcess(thisPlanet);
+			}
+			if( thisPlanet.habitation == 4 ) {
+				thisPlanet = thisPlanet.farmingProcess(thisPlanet);
 			}
 
-			// settlement colony credits
-			if( thisPlanet.happiness > 80 && this.loyalty > 80 && thisPlanet.habitation == 2 ) {
-				MOBA.PlayerEmpire.addFoodCredits(1);
-				MOBA.PlayerEmpire.addTechCredits(1);
-				thisPlanet.resourceGeneration = "1 Food / 1 Tech";
-			}
-
-			// mining coloy rdits
-			if( thisPlanet.happiness > 80 && this.loyalty > 80 && thisPlanet.habitation == 3 ) {
-				MOBA.PlayerEmpire.addFoodCredits(0);
-				MOBA.PlayerEmpire.addTechCredits(2);
-				thisPlanet.resourceGeneration = "2 Tech";
-			}
-
-			// farm colony credits
-			if( thisPlanet.happiness > 80 && this.loyalty > 80 && thisPlanet.habitation == 4 ) {
-				MOBA.PlayerEmpire.addFoodCredits(2);
-				MOBA.PlayerEmpire.addTechCredits(0);
-				thisPlanet.resourceGeneration = "2 Food"
-			}
-
-			// console.log( 'process:', thisPlanet );
-
+			// Keep happiness and loyalty and 100;
+			thisPlanet.happiness = thisPlanet.happiness > 100 ? 100 : thisPlanet.happiness;
+			thisPlanet.loyalty = thisPlanet.loyalty > 100 ? 100 : thisPlanet.loyalty;
 		};
+	},
+
+	homeWorldProcess: function(thisPlanet) {
+		// settlement colony credits
+		var satisfaction = ((thisPlanet.happiness/100) + (thisPlanet.loyalty/100)) /2;
+		var potentialTech = Math.ceil( (thisPlanet.population * 0.00000000012)*satisfaction );
+		var potentialFood = Math.ceil( (thisPlanet.population * 0.00000000012) * satisfaction );
+
+		if( true ) {
+			MOBA.PlayerEmpire.addFoodCredits( potentialFood );
+			MOBA.PlayerEmpire.addTechCredits( potentialTech );
+			thisPlanet.resourceGeneration = potentialTech+" Tech / "+potentialFood+" Food";
+		} else {
+			thisPlanet.resourceGeneration = "Not Happy Enough.";
+		}
+
+		return thisPlanet;
+	},
+
+	settlementProcess: function(thisPlanet) {
+		// settlement colony credits
+		var satisfaction = ((thisPlanet.happiness/100) + (thisPlanet.loyalty/100)) /2;
+		var potentialTech = Math.ceil( (thisPlanet.population * 0.25)*satisfaction );
+		var mineralsNeeded = Math.ceil( potentialTech * 2 );
+
+		if( MOBA.PlayerEmpire.mineralCredits >= mineralsNeeded) {
+			MOBA.PlayerEmpire.addMineralCredits(-mineralsNeeded);
+			MOBA.PlayerEmpire.addTechCredits(potentialTech);
+			thisPlanet.resourceGeneration = potentialTech+" Tech / -"+mineralsNeeded+" Mineral";
+		} else {
+			thisPlanet.resourceGeneration = "Not Enough Minerals.";
+		}
+
+		return thisPlanet;
+	},
+
+	miningProcess: function(thisPlanet) {
+		// mining coloy rdits
+		var satisfaction = ((thisPlanet.happiness/100) + (thisPlanet.loyalty/100)) /2;
+		var potentialMineral =  Math.ceil( (thisPlanet.population * 0.4)*satisfaction );
+    var foodNeeded = Math.ceil( (thisPlanet.population * 0.4)*satisfaction );
+	
+		if( MOBA.PlayerEmpire.foodCredits >= foodNeeded ) {
+			MOBA.PlayerEmpire.addMineralCredits(potentialMineral);
+			MOBA.PlayerEmpire.addFoodCredits(-foodNeeded);
+			thisPlanet.resourceGeneration = potentialMineral +" Mineral / -"+foodNeeded+" Food";
+		} else {
+			thisPlanet.resourceGeneration = "Not Enough Food.";
+		}
+
+		return thisPlanet;
+	},
+
+	farmingProcess: function(thisPlanet) {
+		var satisfaction = ((thisPlanet.happiness/100) + (thisPlanet.loyalty/100)) /2;
+		var potentialFood =  Math.ceil( (thisPlanet.population * 0.6) * satisfaction );
+
+		if( true ) {
+			MOBA.PlayerEmpire.addFoodCredits(potentialFood);
+			thisPlanet.resourceGeneration = potentialFood +" Food";
+		} else {
+			thisPlanet.resourceGeneration = "Not Happy Enough.";
+		}
+
+		return thisPlanet;
 	},
 
 	UpgradeMechanism: function( newPlanet ) {
@@ -218,7 +280,8 @@ planetBuilder.prototype = {
 	},
 
 	generatePlanetName: function() {
-		return this.planetNames[ _.random(0, this.planetNames.length-1)];
+		var index = _.random(0, this.planetNames.length-1);
+		return this.planetNames.splice(index, 1);
 	},
 
 	generatePlanetImage: function() {
