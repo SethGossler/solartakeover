@@ -6,7 +6,10 @@ MOBA.Preload = function(){};
 MOBA.Preload.prototype = {
   preload: function() {
     //show loading bar
-    this.preloadBar = this.add.sprite(100, 100, 'loadbar');
+
+    this.preloadBar = game.add.sprite( ((window.innerWidth/2) - 210), (window.innerHeight/2), 'loadbar');
+    this.preloadBar.anchor.setTo(0, 0.5);
+
     this.load.setPreloadSprite(this.preloadBar);
 
     // after here, we will load our assets for the game ( this can be a long list );

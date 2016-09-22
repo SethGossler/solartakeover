@@ -85,18 +85,21 @@ planetBuilder.prototype = {
 		newPlanet.farmingProcess = this.farmingProcess;
 		newPlanet.clickProcess = this.clickProcess(newPlanet);
 
-
 		return newPlanet;
 	},
 
 	clickProcess: function(thisPlanet) {
 		return function() {
-			console.log("test", thisPlanet);
 			for( var i = 0; i < thisPlanet.items.productionItems.length; i++ ) {
 				if( thisPlanet.items && thisPlanet.items.productionItems[i] && thisPlanet.items.productionItems[i].clickAffect ) {
 					thisPlanet.items.productionItems[i].clickAffect(thisPlanet, MOBA);
 				}
 			};
+			if(thisPlanet.experience >= thisPlanet.neededExperience) {
+				thisPlanet.level++;
+				thisPlanet.experience = 0;
+				thisPlanet.neededExperience += thisPlanet.level * 500;
+			}
 		};
 	},
 
@@ -246,6 +249,19 @@ planetBuilder.prototype = {
 				console.error("Trying to add a bad type of item.")
 			}
 		};
+
+		self.getAllItems = function() {
+			return self.socialItems.concat(self.defenseItems, self.productionItems);
+		};
+
+
+		self.getItems = function(itemName) {
+			var allItems = self.socialItems.concat(self.defenseItems, self.productionItems);
+			var items = _.filter( allItems, function(anItem){
+				return anItem.name == itemName;
+			});
+			return items;
+		};
 		self.getItem = function(itemName) {
 			var allItems = self.socialItems.concat(self.defenseItems, self.productionItems);
 			var item = _.find( allItems, function(anItem){
@@ -253,6 +269,7 @@ planetBuilder.prototype = {
 			});
 			return item;
 		};
+
 		self.useItem = function(itemName) {
 			var item = self.getItem(itemName);
 			if( item != undefined ) {

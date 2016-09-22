@@ -29,7 +29,6 @@ PlayerEmpire.prototype = {
 		this.mineralCredits += newMineralCredits;
 	}
 
-
 }
 
 MOBA.PlayerEmpire = new PlayerEmpire();

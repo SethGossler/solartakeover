@@ -58,6 +58,8 @@ MOBA.planet.prototype = {
       self.model.techCredits = MOBA.PlayerEmpire.techCredits;
       self.model.foodCredits = MOBA.PlayerEmpire.foodCredits;
       self.model.colonizable = self.siblingWithColonyShip != null && self.currentPlanet.habitation == 0;
+      self.possibleItems = MOBA.itemKeeper.getPlanetItems(self.currentPlanet);
+      self.model.items = self.possibleItems;
     }, 100);
 
     rivets.formatters.statustext = function(value) {
@@ -115,19 +117,6 @@ MOBA.planet.prototype = {
       } else {
         console.log('didnt get the item :(');
       }
-      // if( itemName == 'colony-ship' ) { //buying a colony ship
-      //   if(MOBA.PlayerEmpire.techCredits >= 100 && MOBA.PlayerEmpire.foodCredits >= 100 ) {
-      //     MOBA.PlayerEmpire.techCredits = MOBA.PlayerEmpire.techCredits - 100;
-      //     MOBA.PlayerEmpire.foodCredits = MOBA.PlayerEmpire.foodCredits - 100;
-      //     this.currentPlanet.items.addItem({
-      //       name: 'colony-ship',
-      //       alias: 'Colony Ship',
-      //       type: 'production'
-      //     }) 
-      //   } else {
-      //     console.log( 'cant buy ship!' );
-      //   }
-      // }
 
     }
   },
@@ -167,12 +156,12 @@ MOBA.planet.prototype = {
     self.planet.anchor.setTo(0.5, 0.5);
 
     self.planet.inputEnabled = true;
-    self.planet.events.onInputDown.add(function(planet){
 
+    self.planet.events.onInputDown.add(function(planet){
       self.currentPlanet.clickProcess();
       game.add.tween(planet.scale).to({ x: 0.97, y: 0.97}, 150, Phaser.Easing.Back.Out, true, 0);
-    
     }, this);
+
     self.planet.events.onInputUp.add(function(planet){
         game.add.tween(planet.scale).to({ x: 1, y: 1 }, 150, Phaser.Easing.Back.Out, true, 0);
     });

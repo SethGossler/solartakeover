@@ -16,7 +16,6 @@ MOBA.startGame = function() {
 	console.log("game start");
 	clearInterval(MOBA.gameTick);
 	MOBA.gameTick = setInterval(function(){
-		// console.log('do some logic');
 		MOBA.processPlanets();
 	}, 5000);
 };
@@ -64,21 +63,3 @@ $(function(){
 	Backbone.history.start()
   window.router.navigate('menu', {trigger:true, replace:true});
 })
-
-// $(function(){
-// 	console.log('here');
-// 	$(window).resize(function() { resizeGame(); } );
-// 	var resizeGame = function () {
-// 	  var height = window.innerHeight;
-// 	  var width = window.innerWidth;
-// 	  game.width = width;
-// 	  game.height = height;
-// 	  game.stage.bounds.width = width;
-// 	  game.stage.bounds.height = height;
-// 		game.camera.setSize(width, height);
-// 	  if (game.renderType === 1) {
-// 	    game.renderer.resize(width, height);
-// 	    Phaser.Canvas.setSmoothingEnabled(game.context, false);
-// 		}
-// 	}
-// })
