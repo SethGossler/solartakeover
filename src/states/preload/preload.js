@@ -18,6 +18,9 @@ MOBA.Preload.prototype = {
     this.load.image('planet', 'assets/img/planet.png');
     this.load.image('solar-star', 'assets/img/solar-star.png');
     this.load.image('circle', 'assets/img/circle-bg.png');
+    this.load.image('logo', 'assets/img/logo.png');
+    this.load.image('mainMenu', 'assets/img/mainMenu.jpg');
+
   },
 
   create: function() {
